@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration form</title>
+</head>
+<body>
+    <link rel="stylesheet" href="style.css">
+    <h2>Registration form</h2>
+    <div class="formbox">
+    
+    <div>
+        <img class="reg-img1" src="Assests/login1.png">
+    </div>
+    
+    <div class="form-content">
+        <form action="http://localhost:3000/register" id="registerform" method="post">
+            <label>
+                <h6>First Name</h6>
+                <input type="text" class="textbox" name="Fusername" id="firstnameid" placeholder="First Name" required>
+            </label>
+            <label>
+                <h6>Last Name</h6>
+                <input type="text" class="textbox" name="Lusername" id="lastnameid" placeholder="Last Name" required>
+            </label>
+            <label>
+                <h6>Email</h6>
+                <input type="email" class="textbox" name="email" id="email" placeholder="Email" required>
+            </label>
+            <label>
+                <h6>Gender</h6>
+                <input type="text" name="Gender" id="genderid" placeholder="Enter your Gender" required>
+            </label>
+            <label>
+                <h6>City</h6>
+                <input type="text" name="City" id="cityid" placeholder="City" required>
+            </label>
+            <label>
+                <h6>State</h6>
+                <input type="text" name="State" id="stateid" placeholder="State" required>
+            </label>
+            <label>
+                <h6>Password</h6>
+                <input type="password" class="textbox" name="password1" id="password1id" placeholder="Enter Password" required>
+            </label>
+            <label>
+                <h6>Confirm Password</h6>
+                <input type="password" class="textbox" name="password2" id="password2id" placeholder="Confirm Password" required>
+            </label>
+            <br>
+            <label>
+                <button type="submit" class="btn">Register</button>
+            </label>
+            
+        </form>
+    </div>
+    <div>
+        <img class="reg-img1" src="Assests/login2.png">
+    </div>
+</div>
+   
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('registerform').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = {
+        Fusername: document.getElementById("firstnameid").value,
+        Lusername: document.getElementById("lastnameid").value,
+        email: document.getElementById("email").value,
+        password1: document.getElementById("password1id").value
+      };
+
+      fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(res => res.text())
+      .then(data => alert(data))
+      .catch(err => alert('Error: ' + err));
+    });
+});
+  </script>
+</body>
+</html>

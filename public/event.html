@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KindFund | Events</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafc;
+      color: #333;
+    }
+
+    header {
+      background-color: #0055a5;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .event-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      transition: 0.3s ease;
+      position: relative;
+    }
+
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .event-title {
+      font-size: 1.5rem;
+      color: #0055a5;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-info {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .event-label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .register-btn {
+      margin-top: 1rem;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .register-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .no-events {
+      text-align: center;
+      padding: 2rem;
+      font-size: 1.2rem;
+      color: #777;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .modal label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+      font-weight: bold;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .event-card {
+        padding: 1rem;
+      }
+      .event-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📅 Upcoming Events - KindFund</h1>
+</header>
+
+<main id="eventsContainer">
+  <!-- Events load here -->
+</main>
+
+<!-- Modal -->
+<div class="modal" id="registerModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <h2>Register for <span id="eventNameSpan"></span></h2>
+    <form id="registerForm">
+      <input type="hidden" id="eventIdInput" name="eventId">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" required>
+      <button type="submit" class="register-btn">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  function formatTime(timeStr) {
+    const [hours, minutes] = timeStr.split(':');
+    const date = new Date();
+    date.setHours(+hours);
+    date.setMinutes(+minutes);
+    return date.toLocaleTimeString('en-IN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  // Load events
+  fetch('http://localhost:3000/events')
+    .then(res => res.json())
+    .then(events => {
+      const container = document.getElementById('eventsContainer');
+      if (events.length === 0) {
+        container.innerHTML = `<div class="no-events">No events found</div>`;
+        return;
+      }
+
+      events.forEach(event => {
+        const card = document.createElement('div');
+        card.classList.add('event-card');
+
+        card.innerHTML = `
+          <div class="event-title">${event.name}</div>
+          <div class="event-info"><span class="event-label">Start:</span> ${formatDate(event.start_date)} at ${formatTime(event.start_time)}</div>
+          <div class="event-info"><span class="event-label">End:</span> ${formatDate(event.end_date)} at ${formatTime(event.end_time)}</div>
+          <div class="event-info"><span class="event-label">Location:</span> ${event.place}, ${event.city}, ${event.state}</div>
+          <div class="event-info"><span class="event-label">Sponsor:</span> ${event.sponsor || '-'}</div>
+          <div class="event-info"><span class="event-label">Organizer:</span> ${event.organizer || '-'}</div>
+          <button class="register-btn" onclick="openModal(${event.id}, '${event.name}')">Register</button>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading events:', error);
+      document.getElementById('eventsContainer').innerHTML = `<div class="no-events">⚠️ Failed to load events.</div>`;
+    });
+
+  // Modal functions
+  function openModal(eventId, eventName) {
+    document.getElementById('eventIdInput').value = eventId;
+    document.getElementById('eventNameSpan').innerText = eventName;
+    document.getElementById('registerModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('registerModal').style.display = 'none';
+  }
+
+  // Form submit handler (you can change URL to your backend endpoint)
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+      eventId: document.getElementById('eventIdInput').value,
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value
+    };
+
+    fetch('http://localhost:3000/register-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (res.ok) {
+        alert('🎉 Registered successfully!');
+        closeModal();
+      } else {
+        alert('⚠️ Registration failed.');
+      }
+    })
+    .catch(err => {
+      console.error('Registration error:', err);
+      alert('⚠️ Something went wrong.');
+    });
+  });
+</script>
+</body>
+</html>

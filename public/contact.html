@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="contact.css" />
+</head>
+<body>
+
+  <div class="container">
+    <div class="image-side"></div>
+
+    <div class="form-side">
+      <h2>Leave a Message</h2>
+      <form id="contactForm">
+        <input id="name" type="text" name="name" placeholder="Your Name" required><br>
+        <input id="email" type="email" name="email" placeholder="Your Email" required><br>
+        <input id="subject" type="text" name="subject" placeholder="Subject" required><br>
+        <textarea id="message" name="message" placeholder="Your Message" rows="4" required></textarea><br>
+        <button type="submit">Send Message</button>
+      </form>
+      <p id="statusMsg"></p>
+    </div>
+  </div>
+
+
+
+</body>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const formData = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    subject: document.getElementById('subject').value.trim(),
+    message: document.getElementById('message').value.trim()
+  };
+
+  fetch('http://localhost:3000/contact', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('statusMsg').textContent = data.message;
+      document.getElementById('contactForm').reset();
+    })
+    .catch(err => {
+      document.getElementById('statusMsg').textContent = "Error: " + err.message;
+    });
+});
+
+</script>
+</html>

@@ -1,0 +1,119 @@
+/* Make html and body take full height and remove margin */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #f5f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Container fills full viewport */
+.container {
+  display: flex;
+  height: 100vh;  /* Full viewport height */
+  width: 100vw;   /* Full viewport width */
+  overflow: hidden;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Left side: image fills half screen */
+.image-side {
+  flex: 1;
+  /* background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80'); */
+  background-image: url(Assests/family-hands-holding-red-heart-600nw-1487364161.webp);
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.85);
+  position: relative;
+}
+
+/* Overlay for contrast */
+.image-side::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+}
+
+/* Right side: form fills half screen */
+.form-side {
+  flex: 1;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+}
+
+/* Form heading */
+.form-side h2 {
+  margin-bottom: 30px;
+  font-size: 2.4rem;
+  color: #007BFF;
+  letter-spacing: 1px;
+}
+
+/* Inputs and textarea styling */
+form input[type="text"],
+form input[type="email"],
+form textarea {
+  width: 100%;
+  padding: 16px 20px;
+  margin-bottom: 22px;
+  border: 1.8px solid #ddd;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  transition: border-color 0.3s ease;
+  resize: vertical;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form textarea:focus {
+  outline: none;
+  border-color: #007BFF;
+  box-shadow: 0 0 8px rgba(0,123,255,0.5);
+}
+
+/* Button styling */
+form button {
+  padding: 16px 25px;
+  font-size: 1.2rem;
+  background-color: #007BFF;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 700;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+/* Status message styling */
+#statusMsg {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #28a745; /* green for success */
+}
+
+/* Responsive: stack columns vertically on small screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+  }
+  .image-side {
+    height: 250px;
+    flex: none;
+  }
+  .form-side {
+    padding: 40px 25px;
+    flex: none;
+  }
+}

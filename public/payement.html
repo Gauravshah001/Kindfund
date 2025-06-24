@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Charity Donation</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .donation-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 350px;
+    }
+
+    .donation-container h1 {
+      margin-bottom: 20px;
+      color: #2e6da4;
+    }
+
+    .donation-container input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border: 2px solid #2e6da4;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .donation-container button {
+      background-color: #2e6da4;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .donation-container button:hover {
+      background-color: #204d74;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="donation-container">
+    <h1>Donate for a Cause ❤️</h1>
+    
+    <input type="number" id="amount" placeholder="Enter Amount in ₹">
+    <button id="pay-btn">Donate Now</button>
+
+    <div class="footer-note">
+      100% of your donation goes to helping those in need.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("pay-btn").onclick = async function () {
+  const amountInRupees = document.getElementById("amount").value;
+
+  if (!amountInRupees || amountInRupees <= 0) {
+    alert("Please enter a valid amount");
+    return;
+  }
+
+  const amountInPaise = amountInRupees * 100;
+
+  try {
+    const response = await fetch("http://localhost:3000/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: amountInPaise }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert("Payment Error: " + errorData.message);
+      console.error("Payment error response:", errorData);
+      return;
+    }
+
+    const order = await response.json();
+    console.log("Order received:", order);
+
+    const options = {
+      key: "zp_test_uHgK3gLsyVXdzS", 
+      amount: order.amount,
+      currency: "INR",
+      name: "Charity Foundation",
+      description: "Donation",
+      order_id: order.id,
+      handler: function (response) {
+        alert("🎉 Thank you for your donation! Payment ID: " + response.razorpay_payment_id);
+      },
+      theme: { color: "#2e6da4" },
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+
+  } catch (err) {
+    alert("Fetch error: " + err.message);
+    console.error("Fetch error:", err);
+  }
+};
+
+//     document.getElementById("pay-btn").onclick = async function () {
+//       const amountInRupees = document.getElementById("amount").value;
+
+//       if (!amountInRupees || amountInRupees <= 0) {
+//         alert("Please enter a valid amount");
+//         return;
+//       }
+
+//       const amountInPaise = amountInRupees * 100;
+
+//       // const response = await fetch("http://localhost:3000/create-order", {
+//       //   method: "POST",
+//       //   headers: {
+//       //     "Content-Type": "application/json",
+//       //   },
+//       //   body: JSON.stringify({ amount: amountInPaise })
+//       // });
+
+//       // const order = await response.json();
+//       const response = await fetch("http://localhost:3000/create-order", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify({ amount: amountInPaise })
+// });
+
+// if (!response.ok) {
+//   const errorData = await response.json();
+//   alert("Payment Error: " + errorData.message);
+//   return;
+// }
+
+// const order = await response.json();
+
+
+//       const options = {
+//         key: "rzp_test_ruQVOjQqH9rwqF", // Your Razorpay Key ID
+//         amount: order.amount,
+//         currency: "INR",
+//         name: "Charity Foundation",
+//         description: "Donation",
+//         order_id: order.id,
+//         handler: function (response) {
+//           alert("🎉 Thank you for your donation! Payment ID: " + response.razorpay_payment_id);
+//         },
+//         theme: {
+//           color: "#2e6da4",
+//         },
+//       };
+
+//       const rzp1 = new Razorpay(options);
+//       rzp1.open();
+//     };
+  </script>
+</body>
+</html>

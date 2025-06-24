@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Create Event Form</title>
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #e6f0ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150vh;
+  margin: 0;
+}
+
+.event-form {
+  background: #fff;
+  width: 600px;              /* Increased width */
+  border-radius: 12px;
+  padding: 32px 36px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.event-form:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.event-form h2 {
+  margin-bottom: 24px;
+  color: #1a3e72;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 12px;       /* Reduced vertical spacing */
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 4px;        /* Smaller gap below label */
+  font-weight: 600;
+  color: #33475b;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+select {
+  padding: 10px 14px;        /* Compact padding */
+  font-size: 1rem;
+  border: 2px solid #a3b4c4;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus {
+  border-color: #2e6da4;
+  outline: none;
+}
+
+button {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px 0;           /* Slightly less tall button */
+  font-size: 1.05rem;
+  background-color: #2e6da4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #204d74;
+}
+
+@media (max-width: 680px) {
+  .event-form {
+    width: 90%;
+    padding: 28px 20px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<form class="event-form" id="createEventForm" novalidate>
+  <h2>Create Event</h2>
+
+  <div class="form-group">
+    <label for="eventName" class="required">Event Name</label>
+    <input type="text" id="eventName" name="eventName" placeholder="Enter event name" required />
+  </div>
+
+  <div class="form-group">
+    <label for="startDate" class="required">Start Date</label>
+    <input type="date" id="startDate" name="startDate" required />
+  </div>
+
+  <div class="form-group">
+    <label for="startTime" class="required">Start Time</label>
+    <input type="time" id="startTime" name="startTime" required />
+  </div>
+
+  <div class="form-group">
+    <label for="endDate" class="required">End Date</label>
+    <input type="date" id="endDate" name="endDate" required />
+  </div>
+
+  <div class="form-group">
+    <label for="endTime" class="required">End Time</label>
+    <input type="time" id="endTime" name="endTime" required />
+  </div>
+
+  <div class="form-group">
+    <label for="state" class="required">State</label>
+    <input type="text" id="state" name="state" placeholder="Enter state" required />
+  </div>
+
+  <div class="form-group">
+    <label for="city" class="required">City</label>
+    <input type="text" id="city" name="city" placeholder="Enter city" required />
+  </div>
+
+  <div class="form-group">
+    <label for="place" class="required">Place / Venue</label>
+    <input type="text" id="place" name="place" placeholder="Enter place or venue" required />
+  </div>
+
+  <div class="form-group">
+    <label for="sponsor">Sponsor</label>
+    <input type="text" id="sponsor" name="sponsor" placeholder="Enter sponsor name (optional)" />
+  </div>
+
+  <div class="form-group">
+    <label for="organizer" class="required">Organizer</label>
+    <input type="text" id="organizer" name="organizer" placeholder="Enter organizer name" required />
+  </div>
+
+  <button type="submit">Create Event</button>
+</form>
+
+</body>
+<script>
+  async function submitEventForm(event) {
+  event.preventDefault();
+
+  const data = {
+    name: document.getElementById('eventName').value,
+    start_date: document.getElementById('startDate').value,
+    start_time: document.getElementById('startTime').value,
+    end_date: document.getElementById('endDate').value,
+    end_time: document.getElementById('endTime').value,
+    state: document.getElementById('state').value,
+    city: document.getElementById('city').value,
+    place: document.getElementById('place').value,
+    sponsor: document.getElementById('sponsor').value,
+    organizer: document.getElementById('organizer').value,
+  };
+
+  try {
+   const response = await fetch('http://localhost:3000/create-event', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data),
+});
+
+
+    const result = await response.json();
+
+      if (response.ok) {
+        alert('✅ Event saved! Event ID: ' + result.eventId);
+        document.getElementById('createEventForm').reset();
+      } else {
+        alert('❌ Error: ' + result.message);
+      }
+    } catch (error) {
+      alert('🚫 Failed to save event: ' + error.message);
+    }
+  }
+
+  // ✅ Hook the function to the form
+  document.getElementById('createEventForm').addEventListener('submit', submitEventForm);
+
+
+</script>
+</html>

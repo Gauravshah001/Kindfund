@@ -1,0 +1,52 @@
+USE regis;
+CREATE TABLE users(
+id INT AUTO_INCREMENT PRIMARY KEY,
+Fname VARCHAR(100) NOT NULL,
+Lname VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL UNIQUE,
+password1 VARCHAR(255) NOT NULL
+);
+CREATE TABLE contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  subject VARCHAR(200),
+  message TEXT,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+CREATE TABLE IF NOT EXISTS events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  start_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_date DATE NOT NULL,
+  end_time TIME NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  place VARCHAR(255) NOT NULL,
+  sponsor VARCHAR(255),
+  organizer VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+  ALTER TABLE events DROP COLUMN location;
+SHOW TABLES;
+CREATE TABLE event_registrations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  event_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+
+
+
+
+SELECT * FROM users;
+select * FROM contacts;
+select * from events;
+select * from event_registrations;

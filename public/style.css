@@ -1,0 +1,205 @@
+/* .form-content{
+    
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+.formbox h2{
+font-family: 'Times New Roman', Times, serif;
+display: flex;
+justify-content: center;
+align-items: center;
+padding-top: 22px;
+}
+.formbox{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#registerform{
+    border: 0.3px solid rgb(6, 6, 255);
+    border-radius: 10px;
+    padding: 10px 10px 10px 10px;
+    background-color: rgb(196, 196, 255);
+    display: grid;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 300px;
+}
+#registerform h6{
+    margin-top: 19px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.btn{
+    margin-top: 23px;
+    height: 22px;
+    color: rgb(75, 0, 124);
+    width: 180px;
+    margin-bottom: 23px;
+}
+
+.reg-img1{
+    width: 300px;
+}
+h2{
+    display: flex;
+    font-size: 26px;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 169);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.textbox{
+    width: 160px;
+    height: 20px;
+    font-size: 12px;
+    border-radius: 4px;
+    border-color: white;
+
+}
+.textbox:hover{
+    border-color: blue;
+    }
+ */
+/* General Reset */
+/* General Reset */
+/* General Reset */
+
+
+
+
+
+
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 15px;
+}
+
+/* Heading */
+h2 {
+  color: #003366;
+  font-size: 26px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Main Container */
+.formbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  max-width: 1100px;
+}
+
+/* Images */
+.reg-img1 {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Form Container */
+.form-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#registerform {
+  background: #eaf0ff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #6699ff;
+  width: 386px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Label and Input */
+#registerform label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #333;
+}
+
+#registerform h6 {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.textbox,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+.textbox:focus {
+  border-color: #3366cc;
+  outline: none;
+}
+
+/* Button */
+.btn {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #003060;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .formbox {
+    flex-direction: column;
+  }
+
+  .reg-img1 {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  #registerform {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+

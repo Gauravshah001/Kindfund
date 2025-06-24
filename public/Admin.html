@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Registered Users</title>
+</head>
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f4f4f4; }
+</style>
+<body>
+  <div class="adminpanel">
+    <h1>Admin Panel</h1>
+  </div>
+  
+  <h2>Registered Users</h2>
+  <table border="1" id="userTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+   <h1>Upcoming Events</h1>
+  <table id="eventsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>Start Time</th>
+        <th>End Date</th>
+        <th>End Time</th>
+        <th>Location</th>
+        <th>Sponsor</th>
+        <th>Organizer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Events will be inserted here -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('http://localhost:3000/users')
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok. Status: " + res.status);
+        return res.json();
+      })
+      .then(users => {
+        const tbody = document.querySelector("#userTable tbody");
+        users.forEach(user => {
+          const row = `<tr>
+            <td>${user.id}</td>
+            <td>${user.Fname}</td>
+            <td>${user.Lname}</td>
+            <td>${user.email}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      })
+      .catch(err => {
+        console.error("Error loading users:", err);
+        alert("Error loading users. Check console.");
+      });
+
+
+
+       fetch('http://localhost:3000/events')
+      .then(response => response.json())
+      .then(events => {
+        const tbody = document.querySelector('#eventsTable tbody');
+        if (events.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8">No events found.</td></tr>';
+          return;
+        }
+        events.forEach(event => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${event.name}</td>
+            <td>${event.start_date}</td>
+            <td>${event.start_time}</td>
+            <td>${event.end_date}</td>
+            <td>${event.end_time}</td>
+            <td>${event.city}, ${event.state}</td>
+            <td>${event.sponsor || ''}</td>
+            <td>${event.organizer || ''}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading events:', error);
+      });
+  </script>
+</body>
+</html>
